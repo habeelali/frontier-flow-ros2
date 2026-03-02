@@ -1,0 +1,77 @@
+# ----------------------------------------------------------
+# Frontier Explorer — example parameter file
+# ----------------------------------------------------------
+# Usage:
+#   ros2 run frontier_explorer frontier_explorer_node \
+#       --ros-args --params-file config/frontier_explorer_params.yaml
+# ----------------------------------------------------------
+
+frontier_explorer_node:
+  ros__parameters:
+    # ---- Topics & frames ----
+    map_topic: "/map"
+    global_frame: "map"
+    robot_base_frame: "base_link"
+
+    # ---- Timing ----
+    # How often the exploration loop runs (seconds).
+    # Lower = more responsive but more CPU.  1–3 s is typical.
+    refresh_period_sec: 1.0
+
+    # ---- Frontier filtering & scoring ----
+    # Minimum number of frontier cells to consider a cluster.
+    # Increase if the robot chases tiny cracks; decrease if it
+    # misses narrow passages.  20–40 is a good range.
+    min_cluster_cells: 25
+
+    # How much to favour larger frontiers over closer ones.
+    # score = cluster_size^weight / distance
+    # 1.0 = linear (balanced), 1.5 = strong size preference,
+    # 2.0 = very aggressive size preference.
+    frontier_size_weight: 0.0
+
+    # Maximum distance (m) from robot to consider a frontier goal.
+    # Keep this within the reliable range of your planner/costmap.
+    max_goal_dist_m: 8.0
+
+    # Goals closer than this (m) are ignored to avoid oscillation.
+    min_goal_dist_m: 0.3
+
+    # ---- Dynamic replanning (preemption) ----
+    # While navigating, if a new frontier scores this many times
+    # higher than the current goal, cancel and switch.
+    # 2.0 = switch only for clearly better goals.
+    # 1.5 = switch more aggressively.
+    preempt_score_ratio: 2.0
+
+    # Minimum seconds a goal must be active before preemption
+    # is even considered.  Prevents rapid switching.
+    preempt_cooldown_sec: 60.0
+
+    # ---- Heading preference ----
+    # Multiplier applied to frontiers in the robot's front hemisphere
+    # (within ±90° of current heading).  1.0 = no preference.
+    # 1.5 = moderate forward bias.  2.0 = strong forward bias.
+    heading_bonus: 1.5
+
+    # ---- Manual blacklist (RViz) ----
+    # Use RViz "Publish Point" tool to click no-go zones.
+    # Each click adds a permanent exclusion zone with this radius.
+    manual_blacklist_radius_m: 1.0
+
+    # ---- Blacklist (anti-oscillation) ----
+    # Any new candidate within this radius (m) of a blacklisted
+    # point is suppressed.
+    goal_blacklist_radius_m: 0.5
+
+    # How long (sec) a failed/rejected goal stays blacklisted.
+    goal_blacklist_sec: 60.0
+
+    # How long (sec) a successfully reached goal stays blacklisted.
+    # Usually longer so the robot moves on to new areas.
+    goal_reached_blacklist_sec: 120.0
+
+    # ---- Debug ----
+    # Set true to enable verbose debug logging (frontier counts,
+    # TF details, Nav2 feedback, etc.).
+    debug_log: false

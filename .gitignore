@@ -1,0 +1,28 @@
+# ROS 2 build artifacts
+build/
+install/
+log/
+.colcon/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.orig
+*.pyc
+
+# Local configuration
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Git artifacts
+.git/
